@@ -10,6 +10,8 @@ const session       = require("express-session");
 const bcrypt        = require("bcrypt");
 const passport      = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const flash         = require("connect-flash");
+const User          = require("./models/user");
 
 mongoose.connect('mongodb://localhost/sales-prototype');
 
@@ -30,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
+app.use(flash());
 
 //Passport Config
 app.use(session({
@@ -49,7 +52,10 @@ passport.deserializeUser((id, cb) => {
   });
 });
 
-passport.use(new LocalStrategy((username, password, next) => {
+
+passport.use(new LocalStrategy({
+  passReqToCallback: true
+}, (req, username, password, next) => {
   User.findOne({ username }, (err, user) => {
     if (err) {
       return next(err);

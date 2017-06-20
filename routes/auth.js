@@ -11,9 +11,14 @@ const User       = require("../models/user");
 const bcrypt     = require("bcrypt");
 const bcryptSalt = 10;
 
-authRoutes.get("/login", (req, res, next) => {
-  res.render("auth/login");
+authRoutes.get("/private-page", ensureLogin.ensureLoggedIn(), (req, res) => {
+  res.render("private", { user: req.user });
 });
+
+authRoutes.get("/login", (req, res, next) => {
+  res.render("auth/login", { "message": req.flash("error") });
+});
+
 
 authRoutes.post("/login", passport.authenticate("local", {
   successRedirect: "/",
@@ -57,6 +62,12 @@ authRoutes.post("/signup", (req, res, next) => {
       }
     });
   });
+});
+//End Signup Post
+
+authRoutes.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/login");
 });
 
 module.exports = authRoutes;
