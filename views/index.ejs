@@ -2,3 +2,6 @@
 <p>Welcome to <%= title %></p>
 <a href="/login">Login Page</a>
 <a href="/signup">Signup Page</a>
+<% if (user) { %> 
+  <a href = "/dashboard">Your Dashbord </a>
+<%} %>

@@ -74,12 +74,16 @@ passport.use(new LocalStrategy({
 app.use(passport.initialize());
 app.use(passport.session());
 
-//Routes
+//////ROUTES//ROUTES////////////ROUTES//ROUTES//////------->
 const authRoutes = require("./routes/auth");
 app.use('/', authRoutes);
-/////////////////////////////////
+
 const index = require('./routes/index');
 app.use('/', index);
+
+const dashboard = require('./routes/dashboard');
+app.use('/', dashboard);
+////////////////////////////////////////////////////////
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
