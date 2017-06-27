@@ -8,7 +8,8 @@ const userSchema = new Schema({
     type: String,
     enum: ['USER', 'ADMIN'],
     default: 'USER'
-  }
+  },
+  leads: [String]
 }, {
   timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
 });
