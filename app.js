@@ -86,7 +86,7 @@ const index = require('./routes/index');
 app.use('/', index);
 
 const dashboard = require('./routes/dashboard');
-app.use('/', dashboard);
+app.use('/dashboard', dashboard);
 ////////////////////////////////////////////////////////
 
 // catch 404 and forward to error handler
