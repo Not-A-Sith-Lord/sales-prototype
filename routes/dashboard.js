@@ -6,7 +6,13 @@ const passport = require("passport");
 /* GET DASHBOARD */
 
 router.get('/dashboard', checkRoles('USER'),(req, res) => {
-  res.render('dash', {user: req.user, username: req.user.username});
+  res.render('dash', {user: req.user, email: req.user.email});
+});
+
+
+router.get("/dashboard/create-lead", (err, req, res, next)=> {
+  res.render("create-lead");
+
 });
 
 function checkRoles(role){
