@@ -8,8 +8,6 @@ const mongoose = require("mongoose");
 /* GET DASHBOARD */
 
 router.get('/', checkRoles('USER'),(req, res) => {
-
-
   //If the user has no leads skip all these calls
   if (req.user.leads){
 
@@ -19,40 +17,33 @@ router.get('/', checkRoles('USER'),(req, res) => {
     queryArray.push(mongoose.Types.ObjectId(lead))
   });
 
-  //Search with query array
+
   Lead.find({
-    '_id': { $in: queryArray}
+    '_id': { $in: queryArray}   //Search with query array
 }, (err, docs) => {
-  //Load dash with lead docs
      res.render('dash', {
        user: req.user,
        email: req.user.email,
-       leads : docs
+       leads : docs //Load dash with lead docs
      });
 });
-
-} //End first conditional
+}
   else {
      res.render('dash', {user: req.user, email: req.user.email});
 }
-
-
 });
-
 
 router.get("/create-lead", checkRoles('USER'),(req, res, next)=> {
   res.render("create-lead");
-
 });
 
 router.post("/create-lead", (req, res, next)=> {
 
-  //Gotta slice keywords into array
-  const keywords  = req.body.keywords;
-console.log("testing create lead route");
+
   //For now we'll just search if a lead exists with the same email,
   //However eventually we need to check if this specific user or org has
   //the same lead, via multiple paramaters
+  const email = req.body.email;
   Lead.findOne({ email }, "email", (err, lead) => {
     if (lead !== null) {
       res.redirect("/dashboard", { message: "This lead already exists" });
@@ -68,7 +59,7 @@ console.log("testing create lead route");
       address: req.body.address,
       city: req.body.city,
       company: req.body.company,
-      keywords: ["test", "another test", "yet another test"]
+      keywords: req.body.keywords.split(", ") //convert to array
     });
   //New lead is created with a _id here. Now we'll 1. save to DB and
   // 2. Push the ID into the user's leads array
